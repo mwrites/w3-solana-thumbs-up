@@ -139,7 +139,7 @@ function App() {
 
   const renderNotConnectedContainer = () => (
     <Button className="wallet-connect" variant="primary" onClick={connectWallet}>
-      Connect to Your Solana Wallet On DevNet
+      Connect Your DevNet Wallet
     </Button>
   );
 
@@ -305,7 +305,7 @@ function App() {
           <div class="container text-center">
             <Row class="row justify-content-center">
               <div class="container">
-                <h1 class="mb-5 mt-5 fw-bold mt-4 text-white">🦄  Enter The Thumbs Up Competition 🙌  </h1>
+                <h1 class="mb-5 mt-5 fw-bold mt-4 text-white">🦄  Enter The Solana Thumbs Up Competition 🙌  </h1>
                 <p class="mb-0 lead text-white">
                    Send your favorite <a href="https://giphy.com/">gif</a> and see what the community thinks about it!
                 </p>
