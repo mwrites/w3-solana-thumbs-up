@@ -139,7 +139,7 @@ function App() {
 
   const renderNotConnectedContainer = () => (
     <Button className="wallet-connect" variant="primary" onClick={connectWallet}>
-      Connect to Wallet
+      Connect to Your Solana Wallet On DevNet
     </Button>
   );
 
