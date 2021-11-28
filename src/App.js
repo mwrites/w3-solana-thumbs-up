@@ -10,10 +10,13 @@ import idl from "./idl.json";
 import filekp from "./keypair.json";
 
 // SystemProgram is a reference to the Solana runtime!
-const { SystemProgram, Keypair } = web3;
+const { SystemProgram } = web3;
 
 
-const envkp = JSON.parse(process.env.REACT_APP_KEYPAIR);
+var envkp;
+if (process.env.REACT_APP_KEYPAIR !== undefined) {
+  envkp = JSON.parse(process.env.REACT_APP_KEYPAIR);
+}
 const kp = envkp || filekp
 
 const arr = Object.values(kp._keypair.secretKey);
@@ -56,36 +59,11 @@ function App() {
       .then(({ publicKey }) => {
         setWalletAddress(publicKey.toString());
         console.log("Wallet detected, address:", publicKey.toString());
-        // callMySolanaProgramAPI();
         getGifList();
       })
       .catch(({ error }) => {
         console.error(error);
       });
-  };
-
-  // ?????
-  const callMySolanaProgramAPI = async () => {
-    const provider = getConnectionProvider();
-    const program = new Program(idl, programID, provider);
-
-    console.log("calling our freaking Solana Program");
-    // the interesting part
-    var resp = await program.rpc.initialize({
-      accounts: {
-        baseAccount: baseAccount.publicKey,
-        user: provider.wallet.publicKey,
-        systemProgram: SystemProgram.programId,
-      },
-      signers: [baseAccount],
-    });
-
-    console.log(resp);
-
-    const account = await program.account.baseAccount.fetch(
-      baseAccount.publicKey
-    );
-    console.log("Got the account", account);
   };
 
   const getGifList = async () => {
@@ -245,10 +223,6 @@ function App() {
     } catch (error) {
       console.log("Error UpVoting GifID:", id, error);
     }
-
-    // const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    // console.log('account: ', account);
-    // setValue(account.count.toString());
   }
 
 
