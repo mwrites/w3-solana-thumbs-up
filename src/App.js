@@ -1,7 +1,7 @@
 import solana_logo from "./logo-solana-white.svg"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Card, Row, Col, Button, Image, Form, Container } from "react-bootstrap";
+import { Card, Row, Col, Button, Image, Form, Container, InputGroup, FormControl } from "react-bootstrap";
 
 import React, { useEffect, useState } from "react";
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
@@ -10,7 +10,7 @@ import idl from "./idl.json";
 import filekp from "./keypair.json";
 
 // SystemProgram is a reference to the Solana runtime!
-const { SystemProgram } = web3;
+const { SystemProgram, Keypair } = web3;
 
 
 var envkp;
@@ -57,7 +57,7 @@ function App() {
     window.solana
       .connect()
       .then(({ publicKey }) => {
-        setWalletAddress(publicKey.toString());
+        setWalletAddress(publicKey);
         console.log("Wallet detected, address:", publicKey.toString());
         getGifList();
       })
@@ -76,7 +76,9 @@ function App() {
 
       console.log("Got the account", account);
       setGifList(
-        account.gifList.filter((item) => item.gifLink.includes("media"))
+        account.gifList
+        .filter((item) => item.gifLink.includes("media"))
+        .sort((a, b) => (b.votes > a.votes ? 1 : -1))
       );
     } catch (error) {
       console.log("Error in getGifList: ", error);
@@ -160,7 +162,24 @@ function App() {
       return (
         <div className="connected-container">
           <Row xs={1} md={1} className="g-4">
-            <Form
+          <Form noValidate onSubmit={(event) => {
+                event.preventDefault();
+                sendGif();
+              }}>
+            <InputGroup className="mx-auto w-50 mt-3 mb-5">
+              <FormControl
+                aria-label="Enter gif link!"
+                aria-describedby="basic-addon1"
+                placeholder="Enter gif link!"
+                value={inputValue}
+                onChange={onInputChange}
+              />
+              <Button type="submit" variant="primary" id="button-addon1" >
+                Submit
+              </Button>
+            </InputGroup>
+          </Form>
+            {/* <Form
               onSubmit={(event) => {
                 event.preventDefault();
                 sendGif();
@@ -173,26 +192,29 @@ function App() {
                 onChange={onInputChange}
               />
               <Button type="submit" variant="primary"> Submit </Button>
-            </Form>
+            </Form> */}
           </Row>
 
           <Row xs={1} md={4} className="g-4">
             {gifList.map((item, idx) => (
               <Col key={idx}>
                 <Card>
-                  <Card.Img variant="top" src={item.gifLink} />
-                  <Card.Body>
-                    <Card.Title>
-                      Up Votes: {item.votes.toString()}
-                    </Card.Title>
-                    <div className="d-grid gap-2">
-                    <Button variant="secondary" size="lg" data={item.id} onClick={incrementVote.bind(this, item.id)}>Up Vote 👍</Button>
-                    </div>
-                  </Card.Body>
+                  <Card.Header>
+                      Rank #{ idx.toString() }
+                    </Card.Header>
+                    <Card.Img variant="top" src={item.gifLink} />
+                    <Card.Body>
+                      <Card.Title>
+                        Votes: {item.votes.toString()}
+                      </Card.Title>
+                      <div className="d-grid gap-2">
+                      <Button variant="secondary" size="lg" data={item.id} onClick={incrementVote.bind(this, item.id)}>Up Vote 👍</Button>
+                      </div>
+                    </Card.Body>
                   <Card.Footer>
-                    <small className="text-muted">
-                      Submitted by {item.userAddress.toString().substring(0, 6)}
-                    </small>
+                    <Button className="btn-money" size="lg" data={item.id} onClick={sendTip.bind(this, item.id)}>
+                    Send a Tip to {item.userAddress.toString().substring(0, 6)} 💰
+                    </Button>
                   </Card.Footer>
                 </Card>
               </Col>
@@ -204,7 +226,49 @@ function App() {
   };
 
 
+  const createTransaction = async(instructions) => {
+    const anyTransaction = new web3.Transaction().add(instructions);
+    anyTransaction.feePayer = getConnectionProvider().wallet.publicKey;
+    console.log("Getting Recent Blockhash");
+    anyTransaction.recentBlockhash = (
+      await getConnectionProvider().connection.getRecentBlockhash()
+    ).blockhash;
+    return anyTransaction;
+  }
 
+  const createTransferTransaction = async (from, to, amount) => {
+    return createTransaction(
+      web3.SystemProgram.transfer({
+        fromPubkey: from,
+        toPubkey: to,
+        lamports: 100000 * amount,
+    }));
+  }
+
+  const sendTransaction = async(from, to, amount) => {
+    try {
+      console.log(`sending ${amount} from: ${from}, to: ${to}`);
+      let { signature } = await getConnectionProvider().wallet.signAndSendTransaction(await createTransferTransaction(from, to, amount));
+      console.log("Submitted transaction " + signature + ", awaiting confirmation");
+      await getConnectionProvider().connection.confirmTransaction(signature);
+      console.log("Transaction " + signature + " confirmed");
+    } catch (err) {
+      console.warn(err);
+      console.error("Error: " + JSON.stringify(err));
+    }
+  }
+
+  const sendTip = async(id) => {
+    console.log("Tipping:", id);
+
+    const fromWallet = walletAddress;
+    // could use a hashmap
+    const toWallet = gifList.filter(x => x.id === id).map(x => x.userAddress);
+    const amount = 1;
+    await sendTransaction(fromWallet, toWallet, amount);
+
+    sendTransaction(from, to, amount)    
+  }
 
 
   /* Votes */
@@ -241,18 +305,23 @@ function App() {
           <div class="container text-center">
             <Row class="row justify-content-center">
               <div class="container">
-                <h1 class="fw-light mt-4 text-white">Sticky Footer using Flexbox</h1>
-                <p class="lead text-white-50">Use just two Bootstrap utility classes and three custom CSS rules and you will have a flexbox enabled sticky footer for your website!</p>
-                  {/* Add the condition to show this only if we don't have a wallet address */}
-                  {!walletAddress && renderNotConnectedContainer()}
-                  {/* We just need to add the inverse here! */}
-                  {walletAddress && renderConnectedContainer()}
+                <h1 class="mb-5 mt-5 fw-bold mt-4 text-white">🦄  Enter The Thumbs Up Competition 🙌  </h1>
+                <p class="mb-0 lead text-white">
+                   Send your favorite <a href="https://giphy.com/">gif</a> and see what the community thinks about it!
+                </p>
+                <p class="lead text-white">
+                You might even earn some tips 💰 if you get enough love!
+                </p>
+                {/* Add the condition to show this only if we don't have a wallet address */}
+                {!walletAddress && renderNotConnectedContainer()}
+                {/* We just need to add the inverse here! */}
+                {walletAddress && renderConnectedContainer()}
               </div>
             </Row>
           </div>
         </div>
       </div>
-      <div class="footer fixed-bottom">
+      <div id="sticky-footer" class="footer flex-shrink-0 py-0 bg-dark">
         <span>Built on </span><a href="https://solana.com"><Image alt="Solana Logo" className="logo-solana" src={solana_logo} fluid /></a>
       </div>
     </div>

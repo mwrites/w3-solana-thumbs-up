@@ -3330,6 +3330,8 @@
     "node-releases" "^1.1.61"
 
 "bs58@^4.0.0", "bs58@^4.0.1":
+  "integrity" "sha1-vhYedsNU9veIrkBx9j806MTwpCo="
+  "resolved" "https://registry.npmjs.org/bs58/-/bs58-4.0.1.tgz"
   "version" "4.0.1"
   dependencies:
     "base-x" "^3.0.2"
