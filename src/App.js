@@ -7,14 +7,17 @@ import React, { useEffect, useState } from "react";
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { Program, Provider, web3 } from "@project-serum/anchor";
 import idl from "./idl.json";
-import kp from "./keypair.json";
+import filekp from "./keypair.json";
 
 // SystemProgram is a reference to the Solana runtime!
 const { SystemProgram, Keypair } = web3;
 
-// Create an Account (will explain..)
+
+const envkp = JSON.parse(process.env.REACT_APP_KEYPAIR);
+const kp = envkp || filekp
+
 const arr = Object.values(kp._keypair.secretKey);
-const secret = new Uint8Array(arr);
+const secret = new Uint8Array(arr)
 const baseAccount = web3.Keypair.fromSecretKey(secret);
 
 // Remember our program id in Part 1? We can get it from the target IDL file

@@ -7,6 +7,9 @@ Solana Based, React Voting App
 ## Setup
 If this is the first time you are installing the project,
 you need to initialize the base account of the solana program by generating a keypair
+
+Or you can use the existing keypair then your app is connecting to that same data/db as everyone else using that keypair
+
 ```
 node createKeyPair.js
 ```
