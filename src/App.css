@@ -22,10 +22,8 @@ body {
 }
 
 .App {
-  height: 100%;
   text-align: center;
   background-color: rgb(18, 18, 18);
-  padding-bottom: 45px;
 }
 
 .App-logo {
@@ -35,7 +33,6 @@ body {
 
 .footer {
   align-items: center;
-  padding-bottom: 45px;
 }
 
 .footer span {
