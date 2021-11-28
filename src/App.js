@@ -52,7 +52,7 @@ function App() {
 
   const connectWallet = async () => {
     window.solana
-      .connect({ onlyIfTrusted: true })
+      .connect()
       .then(({ publicKey }) => {
         setWalletAddress(publicKey.toString());
         console.log("Wallet detected, address:", publicKey.toString());
