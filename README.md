@@ -31,4 +31,5 @@ npm start
 
 ## Credit
 
-Checkout for more projects like this! [BuildSpace](https://buildspace.so/)
+- Credit to Nader Dabit [https://twitter.com/dabit3] for the createKeyPair.js
+- Checkout [BuildSpace](https://buildspace.so/) for more projects like this
