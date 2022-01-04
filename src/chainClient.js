@@ -79,7 +79,7 @@ const getBaseAccount = async () => {
 };
 
 const getGifList = async () => {
-  return (await getBaseAccount()).gifList;
+  return (await getBaseAccount())?.gifList;
 };
 
 const getProgramDerivedAddress = async () => {

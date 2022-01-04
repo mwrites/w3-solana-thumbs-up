@@ -17,7 +17,7 @@ import './App.css';
 import {
   connectWallet,
   getGifList,
-  // initialize,
+  initialize,
   uploadGif,
   upVoteGif,
 } from './chainClient';
@@ -66,6 +66,10 @@ const App = function () {
     setUserWalletAddress(publicKey);
   };
 
+  const initializePDA = async () => {
+    await initialize();
+  }
+
   const renderNotConnectedContainer = () => (
     <Button
       className="wallet-connect"
@@ -78,15 +82,15 @@ const App = function () {
 
   const renderConnectedContainer = () => {
     // If we hit this, it means the program account hasn't be initialized.
-    // if (gifList === null) {
-    //   return (
-    //     <div className="connected-container">
-    //       <Button className="" onClick={initialize}>
-    //         Do One-Time Initialization For GIF Program Account
-    //       </Button>
-    //     </div>
-    //   );
-    // }
+    if (gifList === null) {
+      return (
+        <div className="connected-container">
+          <Button className="" onClick={initializePDA}>
+            Do One-Time Initialization For GIF Program Account
+          </Button>
+        </div>
+      );
+    }
     // Otherwise, we're good! Account exists. User can submit GIFs.
 
     return (
@@ -181,8 +185,6 @@ const App = function () {
 
   useEffect(() => {
     async function initChainClient() {
-      // await initialize();
-
       const gifList = await getGifList();
       updateGifList(gifList);
     }
@@ -191,7 +193,6 @@ const App = function () {
 
   return (
     <div className="App">
-      <div className="d-flex flex-column">
         <div id="page-content">
           <div className="container text-center">
             <Row className="row justify-content-center">
@@ -215,19 +216,18 @@ const App = function () {
             </Row>
           </div>
         </div>
+        <div id="sticky-footer" className="footer flex-shrink-0 py-0 bg-dark">
+          <span>Built on </span>
+          <a href="https://solana.com">
+            <Image
+              alt="Solana Logo"
+              className="logo-solana"
+              src={solanaLogo}
+              fluid
+            />
+          </a>
+        </div>
       </div>
-      <div id="sticky-footer" className="footer flex-shrink-0 py-0 bg-dark">
-        <span>Built on </span>
-        <a href="https://solana.com">
-          <Image
-            alt="Solana Logo"
-            className="logo-solana"
-            src={solanaLogo}
-            fluid
-          />
-        </a>
-      </div>
-    </div>
   );
 };
 
