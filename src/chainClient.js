@@ -1,7 +1,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Program, Provider, web3, BN } from '@project-serum/anchor';
 
-import { programAddress, pdaSeed, network, connectionsOptions } from 'config';
+import { programAddress, pdaSeed, network, connectionsOptions } from './config';
 
 
 // SystemProgram is a reference to the Solana runtime!
@@ -72,9 +72,7 @@ const getBaseAccount = async () => {
   const { pda } = await getProgramDerivedAddress();
   const program = await getProgram();
   try {
-    const account = await program.account.baseAccount.fetch(pda);
-    console.log(`Got BaseAccount: ${account}`);
-    return account;
+    return await program.account.baseAccount.fetch(pda);;
   } catch (error) {
     console.error(error);
   }

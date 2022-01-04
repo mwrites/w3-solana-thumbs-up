@@ -16,12 +16,11 @@ import './App.css';
 
 import {
   connectWallet,
-  getBaseAccount,
   getGifList,
   // initialize,
   uploadGif,
   upVoteGif,
-} from './ChainClient.jsx';
+} from './chainClient';
 
 const App = function () {
   const [userWalletAddress, setUserWalletAddress] = useState(null);
