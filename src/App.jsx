@@ -25,7 +25,7 @@ import {
 const App = function () {
   const [userWalletAddress, setUserWalletAddress] = useState(null);
   const [inputValue, setInputValue] = useState('');
-  const [gifList, setGifList] = useState([]);
+  const [gifList, setGifList] = useState(null);
 
   const updateGifList = async (gifList) => {
     if (gifList === undefined) {

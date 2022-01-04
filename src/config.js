@@ -5,7 +5,7 @@ export const programAddress = new PublicKey(
     'EGWf3mBuwhvjmR134QfzKGMo8EgtsC4ieMP3D6mxWFXq'
 );
   
-export const pdaSeed = 'base_account3';
+export const pdaSeed = 'base_account22';
   
 export const network = clusterApiUrl('devnet');
   
