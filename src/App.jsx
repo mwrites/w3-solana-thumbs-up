@@ -202,7 +202,7 @@ const App = function () {
                 </h1>
                 <p className="mb-0 lead text-white">
                   Send your favorite
-                  <a href="https://giphy.com/">gif</a>
+                  &nbsp;<a href="https://giphy.com/">gif</a>&nbsp;
                   and see what the community thinks about it!
                 </p>
                 <p className="lead text-white">

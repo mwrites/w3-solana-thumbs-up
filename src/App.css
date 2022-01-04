@@ -112,3 +112,9 @@ body {
   padding-right: 40px;
   border-radius: 10px;
 }
+
+a {
+  color: var(--col-sol-green);
+  font-weight: bold;
+  text-decoration: none;
+}
