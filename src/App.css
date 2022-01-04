@@ -65,11 +65,7 @@ body {
 }
 
 .btn-primary {
-  background: -webkit-linear-gradient(
-    left,
-    var(--col-sol-green),
-    var(--col-sol-blue)
-  );
+  background: -webkit-linear-gradient(left, var(--col-sol-green), var(--col-sol-blue));
   border: 0;
   background-size: 200% 200%;
   height: 44px;
