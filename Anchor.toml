@@ -1,0 +1,15 @@
+[programs.localnet]
+moon = 'EGWf3mBuwhvjmR134QfzKGMo8EgtsC4ieMP3D6mxWFXq'
+
+[programs.devnet]
+moon = "EGWf3mBuwhvjmR134QfzKGMo8EgtsC4ieMP3D6mxWFXq"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/Users/matanwrites/.config/solana/id.json"
+
+[scripts]
+test = "yarn run mocha -t 1000000 tests/"
